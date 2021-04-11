@@ -3,6 +3,7 @@
 #
 from flask import Flask
 from flask import request, abort, make_response, jsonify
+from clickhouse_driver import Client
 
 app = Flask(__name__)
 
@@ -19,6 +20,22 @@ def do_something_with_params():
     param1 = request.args.get('param1')
     param2 = request.args.get('param2')
     return(f"PARAM1 {param1} PARAM2 {param2}\n")
+
+@app.route('/get_most_recent_stats_params', methods=['GET'])
+def get_most_recent_stats_params():
+    table = request.args.get('table')
+    params = request.args.get('params')
+
+    client = Client(host='localhost', port=9090)
+    query = f"""
+    SELECT {params} from {table}
+    """
+
+    res = client.execute(query)
+
+    # return(f"PARAM1 {param1} PARAM2 {param2}\n")
+    return jsonify(res)
+
 
 @app.errorhandler(404)
 def not_found(error):
