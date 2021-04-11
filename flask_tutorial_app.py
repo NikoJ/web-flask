@@ -24,7 +24,7 @@ def do_something_with_params():
 @app.route('/get_most_recent_stats_params', methods=['GET'])
 def get_most_recent_stats_params():
     table = request.args.get('table')
-    fields = request.args.get('params')
+    fields = request.args.get('fields')
 
     client = Client(host='localhost', port=9090)
     query = f"""
