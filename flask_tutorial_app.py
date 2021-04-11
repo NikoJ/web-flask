@@ -27,10 +27,7 @@ def get_most_recent_stats_params():
     fields = request.args.get('fields')
 
     client = Client(host='localhost', port=9090)
-    query = f"""
-    SELECT {fields} from {table}
-    """
-
+    query = f"SELECT {fields} FROM {table}"
     res = client.execute(query)
 
     # return(f"PARAM1 {param1} PARAM2 {param2}\n")
