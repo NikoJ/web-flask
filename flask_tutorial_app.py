@@ -30,13 +30,21 @@ def get_most_recent_stats_params():
     query = f"SELECT {fields} FROM {table}"
     res = client.execute(query)
 
-    # return(f"PARAM1 {param1} PARAM2 {param2}\n")
-    return jsonify(res)
+    result = {}
+    for counter, value in enumerate(fields.split(',')):
+        result[value] = res[0][counter]
+
+    return jsonify(result)
 
 
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'error': 'Not found. Bad luck!'}), 404)
+
+
+@app.errorhandler(500)
+def not_found(error):
+    return make_response(jsonify({'error': 'Error args!'}), 500)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
